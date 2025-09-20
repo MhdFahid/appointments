@@ -1,3 +1,6 @@
+import 'package:appointments/ui/widgets/custom_button.dart';
+import 'package:appointments/ui/widgets/custom_text_field.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
@@ -10,52 +13,120 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController(text: 'test_user');
   final _passwordController = TextEditingController(text: '12345678');
 
+  void _login() async {
+    if (_formKey.currentState!.validate()) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      try {
+        await authProvider.login(
+          _usernameController.text,
+          _passwordController.text,
+        );
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: authProvider.isLoading
-                  ? null
-                  : () async {
-                      final success = await authProvider.login(
-                        _usernameController.text,
-                        _passwordController.text,
-                      );
-                      if (success && mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Login Successful')),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Login Failed')),
-                        );
-                      }
-                    },
-              child: authProvider.isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text('Login'),
-            ),
-          ],
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Image.asset('assets/images/login_logo.png'),
+              SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: [
+                    Text('Login Or Register To Book Your Appointments',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.w600)),
+                    SizedBox(height: size.height * 0.05),
+                    CustomTextField(
+                      controller: _usernameController,
+                      labelText: "Username",
+                      field: 'Username',
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    CustomTextField(
+                      controller: _passwordController,
+                      labelText: "Password",
+                      field: 'Password',
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    CustomButton(
+                      onPressed: _login,
+                      buttonText: 'Login',
+                      isLoading:
+                          !Provider.of<AuthProvider>(context).authIsLoading,
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            text:
+                                "By creating or logging into an account you are agreeing with our ",
+                            style: TextStyle(color: Colors.black, fontSize: 15),
+                            children: [
+                              TextSpan(
+                                text: "Terms and Conditions",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // TODO: Open Terms page
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "Terms and Conditions tapped")),
+                                    );
+                                  },
+                              ),
+                              TextSpan(
+                                text: " and ",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: "Privacy Policy",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // TODO: Open Privacy page
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("Privacy Policy tapped")),
+                                    );
+                                  },
+                              ),
+                              TextSpan(
+                                text: ".",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ])),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
