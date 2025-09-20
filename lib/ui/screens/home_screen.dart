@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(3.0),
         child: CustomButton(
           buttonText: "Register Patient",
-          isLoading: true,
+          isLoading: false,
           onPressed: () async {
             await Navigator.push(
               context,

@@ -24,17 +24,8 @@ class CustomButton extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0), color: buttonColor),
         child: isLoading
-            ? GestureDetector(
-                onTap: onPressed,
-                child: Center(
-                    child: Text(buttonText,
-                        style: TextStyle(
-                            color: textColor ?? Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600))),
-              )
-            : Padding(
-                padding: const EdgeInsets.all(2.0),
+            ? const Padding(
+                padding: EdgeInsets.all(2.0),
                 child: SizedBox(
                   height: 50,
                   width: 50,
@@ -45,7 +36,14 @@ class CustomButton extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
+              )
+            : Center(
+                child: Text(buttonText,
+                    style: TextStyle(
+                        color: textColor ?? Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600))),
+
       ),
     );
   }

@@ -186,53 +186,6 @@ class _RegisterPatientScreenState extends State<RegisterPatientScreen> {
                           );
                   },
                 ),
-                Consumer<AuthProvider>(
-                  builder: (context, auth, child) {
-                    if (auth.isFetchingTreatments) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    final treatments = auth.treatments;
-                    if (treatments.isEmpty) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text('No treatments available'),
-                      );
-                    }
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Treatments',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: treatments.map((treatment) {
-                            final isSelected = selectedTreatments
-                                .any((sel) => sel.id == treatment.id);
-                            return FilterChip(
-                              label: Text(treatment.name),
-                              selected: isSelected,
-                              onSelected: (selected) {
-                                setState(() {
-                                  if (selected) {
-                                    if (!isSelected)
-                                      selectedTreatments.add(treatment);
-                                  } else {
-                                    selectedTreatments.removeWhere(
-                                        (s) => s.id == treatment.id);
-                                  }
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    );
-                  },
-                ),
                 const SizedBox(height: 16),
                 CustomButton(
                   buttonText: "+ Add Treatments",

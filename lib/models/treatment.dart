@@ -37,8 +37,6 @@ class Treatment {
   final String duration;
   final String price;
   final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   Treatment({
     required this.id,
@@ -47,20 +45,16 @@ class Treatment {
     required this.duration,
     required this.price,
     required this.isActive,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory Treatment.fromJson(Map<String, dynamic> json) {
     return Treatment(
-      id: json['id'],
+      id: json['id'] as int,
       branches: json['branches'] ?? [],
-      name: json['name'],
-      duration: json['duration'],
-      price: json['price'],
-      isActive: json['is_active'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      name: json['name'] ?? '',
+      duration: json['duration'] ?? '',
+      price: (json['price'] ?? '').toString(),
+      isActive: json['is_active'] ?? false,
     );
   }
 
@@ -72,8 +66,6 @@ class Treatment {
       'duration': duration,
       'price': price,
       'is_active': isActive,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
     };
   }
 }

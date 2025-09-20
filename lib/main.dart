@@ -1,3 +1,4 @@
+import 'package:appointments/services/invoice.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Consumer<AuthProvider>(
           builder: (context, auth, _) {
-            return auth.token != null ? HomeScreen() : const LoginScreen();
+            return auth.token != null ? PdfPage() : const LoginScreen();
           },
         ),
       ),

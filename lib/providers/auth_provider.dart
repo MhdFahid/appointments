@@ -26,10 +26,13 @@ class AuthProvider with ChangeNotifier {
       _token = data['token'];
       if (_token != null) {
         api.updateToken(_token!);
+        fetchTreatments();
+        fetchBranches();
         authIsLoading = false;
         notifyListeners();
         return true;
       }
+      authIsLoading = false;
     }
     authIsLoading = false;
     notifyListeners();
@@ -61,6 +64,7 @@ class AuthProvider with ChangeNotifier {
     } catch (e) {
       // TODO: Handle error
     }
+    isFetchingTreatments = false;
     notifyListeners();
   }
 
@@ -113,6 +117,35 @@ class AuthProvider with ChangeNotifier {
 
     patientIsLoading = false;
     notifyListeners();
+  }
+
+  int _maleCount = 0;
+  int _femaleCount = 0;
+  int get maleCount => _maleCount;
+  int get femaleCount => _femaleCount;
+
+  void incrementMale() {
+    _maleCount++;
+    notifyListeners();
+  }
+
+  void decrementMale() {
+    if (_maleCount > 0) {
+      _maleCount--;
+      notifyListeners();
+    }
+  }
+
+  void incrementFemale() {
+    _femaleCount++;
+    notifyListeners();
+  }
+
+  void decrementFemale() {
+    if (_femaleCount > 0) {
+      _femaleCount--;
+      notifyListeners();
+    }
   }
 
   final List<Treatment> _selectedTreatments = [];
