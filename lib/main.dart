@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Consumer<AuthProvider>(
           builder: (context, auth, _) {
-            return auth.token != null ? PdfPage() : const LoginScreen();
+            return auth.token != null ? HomeScreen() : const LoginScreen();
           },
         ),
       ),

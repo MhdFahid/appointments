@@ -2,6 +2,7 @@ import 'package:appointments/models/branch.dart';
 import 'package:appointments/models/patient.dart';
 import 'package:appointments/models/treatment.dart';
 import 'package:appointments/providers/auth_provider.dart';
+import 'package:appointments/services/invoice.dart';
 import 'package:appointments/ui/widgets/custom_button.dart';
 import 'package:appointments/ui/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -189,7 +190,7 @@ class _RegisterPatientScreenState extends State<RegisterPatientScreen> {
                 const SizedBox(height: 16),
                 CustomButton(
                   buttonText: "+ Add Treatments",
-                  isLoading: true,
+                  isLoading: false,
                   buttonColor: const Color.fromARGB(255, 158, 200, 160),
                   textColor: Colors.black,
                   onPressed: () async {
@@ -301,6 +302,10 @@ class _RegisterPatientScreenState extends State<RegisterPatientScreen> {
                       onPressed: () {
                         // Validate form before calling provider
                         if (!_formKey.currentState!.validate()) return;
+                        pdfCreate(
+                          nameController.text,
+                          addressController.text,
+                        );
                         auth.registerPatient(
                           name: nameController.text.trim(),
                           executive: executiveController.text.trim(),
@@ -318,7 +323,7 @@ class _RegisterPatientScreenState extends State<RegisterPatientScreen> {
                         );
                       },
                       buttonText: 'Register',
-                      isLoading: true,
+                      isLoading: false,
                     );
                   },
                 ),

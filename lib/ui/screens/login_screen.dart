@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: _login,
                       buttonText: 'Login',
                       isLoading:
-                          !Provider.of<AuthProvider>(context).authIsLoading,
+                          Provider.of<AuthProvider>(context).authIsLoading,
                     ),
                     SizedBox(height: size.height * 0.05),
                     RichText(

@@ -200,7 +200,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await api.postForm('PatientRegister', {
+      final response = await api.postForm('PatientUpdate', {
         'name': name,
         'executive': executive,
         'payment': payment.toString(),
